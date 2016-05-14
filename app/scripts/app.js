@@ -13,13 +13,18 @@ angular
     'ngAnimate', 'ngAria', 'ngRoute', 'ngMaterial'
   ])
   .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'scripts/home/home.html',
-        controller: 'CtrlHome',
-        controllerAs: 'vm'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
+      $routeProvider
+          .when('/', {
+              templateUrl: 'scripts/home/home.html',
+              controller: 'CtrlHome',
+              controllerAs: 'vm'
+          })
+          .when('/colors/time-trial', {
+              templateUrl: 'scripts/preattentive_color/time_trial/view.html',
+              controller: 'CtrlColorTimeTrial',
+              controllerAs: 'vm'
+          })
+          .otherwise({
+              redirectTo: '/'
+          });
   });
