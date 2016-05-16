@@ -3,10 +3,11 @@
 angular.module('infoVisU2App')
     .controller('CtrlColorTimeTrial', CtrlColorTimeTrial);
 
-CtrlColorTimeTrial.$inject = ['$scope', '$log', '$timeout'];
-function CtrlColorTimeTrial($scope, $log, $timeout){
+CtrlColorTimeTrial.$inject = ['$scope', '$log', '$interval'];
+function CtrlColorTimeTrial($scope, $log, $interval){
     var self = this;
     self.init = init;
+    self.startGame = startGame;
 
     init();
 
@@ -15,25 +16,84 @@ function CtrlColorTimeTrial($scope, $log, $timeout){
         self.level = [];
         self.boxLevel = ["30%", "60%", "100%"];
         self.currLevel = 0;
+        self.isGameStart = false;
+        self.isCounterStart = false;
+        self.isGameEnd = false;
+        self.timeStart = 0;
+        self.timeStop = 0;
+        self.message = ["Where is the red circle?", "Now with more distractors...", "Added even more disctractors..."];
+        self.saveGameInfo = [];
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
-
             displayShape(self.currLevel);
-
             $log.info(self.level);
         });
         
         $scope.$on('pressed-key', function(event, result){
             $log.info("Key Pressed: " + result + " " +self.answer);
-            if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
-                $log.info("Answer Correct!");
+            if(self.isGameStart){
+                self.timeStop = new Date().getTime();
+                var execTime = self.timeStop - self.timeStart;
+
+                if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
+                    $log.info("Answer Correct!");
+                    displayAnswer("Correct! With Execute Time: " + execTime + " ms");
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct", "execTime": execTime});
+                } else {
+                    displayAnswer("Ups, Wrong! With Execute Time: " + execTime + " ms");
+                    $log.info("Answer Wrong!");
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong", "execTime": execTime});
+                }
+                self.isGameStart = false;
                 self.currLevel += 1;
-                displayShape(self.currLevel);
-            } else {
-                $log.info("Answer Wrong!")
+
+                if(self.currLevel > 2){
+                    $log.info(self.saveGameInfo);
+                } else{
+                    displayShape(self.currLevel);
+                }
             }
         });
+    }
+
+    function startGame(){
+        self.isCounterStart = true;
+        var c = 10;
+        var timer = $interval(function(){
+            if(c%10 == 0) self.timerCount = c/10;
+            if(c == 50) self.timerCount = "Start";
+            if(c == 60){
+                self.timerCount = "";
+                timer = stopTimer(timer);
+                self.isGameStart = true;
+                self.timeStart = new Date().getTime();
+            }
+            c++;
+        }, 60);
+    }
+
+    function displayAnswer(answer){
+        var c = 10;
+        var timer = $interval(function(){
+            self.timerCount = answer;
+            if(c == 60){
+                timer = stopTimer(timer);
+                self.timerCount = "";
+                self.isCounterStart = false;
+                if(self.currLevel > 2){
+                    self.isGameEnd = true;
+                }
+            }
+            c++;
+        }, 60);
+    }
+
+    function stopTimer(timer){
+        if(angular.isDefined(timer)){
+            $interval.cancel(timer);
+            return undefined;
+        }
     }
 
     function displayShape(level){console.log(self.level)
