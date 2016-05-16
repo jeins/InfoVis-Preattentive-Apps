@@ -14,13 +14,6 @@ function drtvCanvas($timeout){
                 $timeout(function () {
                     height = element[0].offsetHeight;
                     width = element[0].offsetWidth;
-                    if (attrs.key) {
-                        scope[attrs.key] = {
-                            height: height,
-                            width: width
-                        };
-                        return;
-                    }
                     scope.$broadcast("canvas-size", [width, height]);
                 });
             });
