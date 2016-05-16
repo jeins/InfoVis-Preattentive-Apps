@@ -14,28 +14,34 @@ function CtrlColorTimeTrial($scope, $log, $timeout){
         self.distance = 25;
         self.level = [];
         self.boxLevel = ["30%", "60%", "100%"];
-        self.currLevel = 1;
+        self.currLevel = 0;
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
-            
-            self.maxPosX = self.level[self.currLevel].maxPosX - (self.distance*2);
-            self.maxPosY = self.level[self.currLevel].maxPosY - (self.distance*2);
-            self.box = self.boxLevel[self.currLevel];
-            self.shapePosition = generateShape(self.maxPosX, self.maxPosY);
+
+            displayShape(self.currLevel);
 
             $log.info(self.level);
-            $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
         });
         
         $scope.$on('pressed-key', function(event, result){
             $log.info("Key Pressed: " + result + " " +self.answer);
             if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
-                $log.info("Answer Correct!")
+                $log.info("Answer Correct!");
+                self.currLevel += 1;
+                displayShape(self.currLevel);
             } else {
                 $log.info("Answer Wrong!")
             }
         });
+    }
+
+    function displayShape(level){console.log(self.level)
+        self.maxPosX = self.level[level].maxPosX - (self.distance*2);
+        self.maxPosY = self.level[level].maxPosY - (self.distance*2);
+        self.box = self.boxLevel[level];
+        self.shapePosition = generateShape(self.maxPosX, self.maxPosY);
+        $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
     }
     
     function generateShape(maxPosX, maxPosY){
