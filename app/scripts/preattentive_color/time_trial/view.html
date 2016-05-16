@@ -4,39 +4,20 @@
 
         <md-divider md-inset></md-divider>
 
-        <md-card style="width: 80%; height: 60%">
-            <md-card-content>
+        <md-card style="width: 80%; height: 60%" drtv-canvas>
+            <md-card-content layout-fill layout="column" layout-align="center center">
                 <svg width=100% height=100%>
-                    <svg x="10" y="10"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="10" y="40"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="10" y="70"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="10" y="100"><polygon fill="red" points="0,20 10,3 20,20"/></svg>
-                    <svg x="10" y="130"><rect height="20" width="20" fill="aqua"/></svg>
-
-
-                    <svg x="40" y="10"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="40" y="40"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="40" y="70"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="40" y="100"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="40" y="130"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-
-
-                    <svg x="70" y="10"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="70" y="40"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="70" y="70"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="70" y="100"><rect fill="green" height="20" width="20"/></svg>
-                    <svg x="70" y="130"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-
-
-                    <svg x="100" y="10"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="100" y="40"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="100" y="70"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="100" y="100"><circle cx="10" cy="10" r="10" fill="green"/></svg>
-                    <svg x="100" y="130"><circle cx="10" cy="10" r="10" fill="green"/></svg>
+                    <svg ng-repeat="shape in vm.shapePosition" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}">
+                        <circle ng-if="shape.shape == 'circle'" cx="10" cy="10" r="10" fill="{{shape.color}}"/>
+                        <rect ng-if="shape.shape == 'rect'" height="20" width="20" fill="{{shape.color}}"/>
+                    </svg>
                 </svg>
             </md-card-content>
         </md-card>
 
-        <md-icon md-font-set="material-icons" ng-style="{'font-size': '95px'}"> arrow_forward </md-icon>
+        <div>
+            <md-icon md-font-set="material-icons" ng-style="{'font-size': '95px'}"> arrow_forward </md-icon>
+            <md-icon md-font-set="material-icons" ng-style="{'font-size': '95px'}"> arrow_forward </md-icon>
+        </div>
     </md-whiteframe>
 </md-content>
