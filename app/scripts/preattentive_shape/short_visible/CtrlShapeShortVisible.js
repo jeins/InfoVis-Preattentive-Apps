@@ -129,18 +129,20 @@ function CtrlShapeShortVisible($scope, $log, $interval){
         var randomX = Math.ceil(Math.random() * (self.maxPosX/self.distance)) * self.distance;
         var randomY = Math.ceil(Math.random() * (self.maxPosY/self.distance)) * self.distance;
         var randomAnswer = Math.ceil(Math.random() * 2); $log.info("Answer: " + randomAnswer);
+        var randomColor = '#' + Math.random().toString(16).slice(2, 8);
+
         for(var i=0; i<self.maxPosX; i+=self.distance){
             for(var j=0; j<self.maxPosY; j+=self.distance){
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
-                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": "#383886"});
+                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColor});
                         self.answer = "present";
                     }
                     else {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
+                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
                     }
                 } else{
-                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
+                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
                     self.answer = "absent";
                 }
             }
