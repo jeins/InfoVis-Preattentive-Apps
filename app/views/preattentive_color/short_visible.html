@@ -1,7 +1,6 @@
 <md-content style="height: 97%">
     <md-whiteframe class="md-whiteframe-4dp" layout-fill layout="column" layout-align="center center">
-        <h2 style="margin-top: -60px">Test: Conjunction Time Trial</h2>
-
+        <h2 style="margin-top: -60px">Test: Colors Short Visible</h2>
         <p style="text-align: center">
             Use Right / Left-Arrow on your keyboard for selection. <br>
             Right Keyboard to answer: "Present" | left Keyboard to answer: "Absent"
@@ -13,31 +12,30 @@
                     <tr>
                         <th>Level</th>
                         <th>Answer</th>
-                        <th>Time (ms)</th>
                     </tr>
                     <tr ng-repeat="result in vm.saveGameInfo">
                         <td>{{result["level"] + 1}}</td>
                         <td>{{result["answer"]}}</td>
-                        <td>{{result["execTime"]}} ms</td>
                     </tr>
                     <tr>
-                        <td colspan="3" align="center"><md-button class="md-raised md-primary" ng-href="#/">Back To Home</md-button></td>
+                        <td colspan="2" align="center"><md-button class="md-raised md-primary" ng-href="#/">Back To Home</md-button></td>
                     </tr>
                 </table>
 
                 <h3 ng-if="!vm.isCounterStart && !vm.isGameEnd">{{vm.message[vm.currLevel]}}</h3>
 
-                <h1 ng-if="!vm.isGameStart && vm.isCounterStart">{{vm.timerCount}}</h1>
+                <h1 ng-if="(!vm.isGameStart && vm.isCounterStart) || vm.hideTheShape">{{vm.timerCount}}</h1>
 
                 <md-button class="md-icon-button " ng-if="!vm.isCounterStart && !vm.isGameEnd" ng-click="vm.startGame()" style="width: 75px; height: 75px">
                     <md-icon md-font-set="material-icons"  ng-style="{'font-size': '48px'}"> play_circle_filled </md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Click This, if you ready!
+                    </md-tooltip>
                 </md-button>
 
-                <svg ng-attr-width="{{vm.box}}" ng-attr-height="{{vm.box}}" ng-if="vm.isGameStart">
+                <svg ng-attr-width="{{vm.box}}" ng-attr-height="{{vm.box}}" ng-if="vm.isGameStart && !vm.hideTheShape">
                     <svg ng-repeat="shape in vm.shapePosition" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}">
                         <circle ng-if="shape.shape == 'circle'" cx="10" cy="10" r="10" fill="{{shape.color}}"/>
-                        <rect ng-if="shape.shape == 'rect'" height="20" width="20" fill="{{shape.color}}"/>
-                        <polygon ng-if="shape.shape == 'triangle'" fill="{{shape.color}}" points="0,20 10,3 20,20" />
                     </svg>
                 </svg>
             </md-card-content>

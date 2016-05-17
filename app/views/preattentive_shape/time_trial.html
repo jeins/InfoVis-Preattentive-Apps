@@ -30,6 +30,9 @@
 
                 <md-button class="md-icon-button " ng-if="!vm.isCounterStart && !vm.isGameEnd" ng-click="vm.startGame()" style="width: 75px; height: 75px">
                     <md-icon md-font-set="material-icons"  ng-style="{'font-size': '48px'}"> play_circle_filled </md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Click This, if you ready!
+                    </md-tooltip>
                 </md-button>
 
                 <svg ng-attr-width="{{vm.box}}" ng-attr-height="{{vm.box}}" ng-if="vm.isGameStart">
