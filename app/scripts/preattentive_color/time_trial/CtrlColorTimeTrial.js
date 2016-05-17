@@ -23,6 +23,7 @@ function CtrlColorTimeTrial($scope, $log, $interval){
         self.timeStop = 0;
         self.message = ["Where is the red circle?", "Now with more distractors...", "Added even more disctractors..."];
         self.saveGameInfo = [];
+        self.canvasColor = "white";
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
@@ -40,10 +41,12 @@ function CtrlColorTimeTrial($scope, $log, $interval){
                     $log.info("Answer Correct!");
                     displayAnswer("Correct! With Execute Time: " + execTime + " ms");
                     self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct", "execTime": execTime});
+                    self.canvasColor = "green";
                 } else {
                     displayAnswer("Ups, Wrong! With Execute Time: " + execTime + " ms");
                     $log.info("Answer Wrong!");
                     self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong", "execTime": execTime});
+                    self.canvasColor = "red";
                 }
                 self.isGameStart = false;
                 self.currLevel += 1;
@@ -78,6 +81,7 @@ function CtrlColorTimeTrial($scope, $log, $interval){
         var timer = $interval(function(){
             self.timerCount = answer;
             if(c == 60){
+                self.canvasColor = "white";
                 timer = stopTimer(timer);
                 self.timerCount = "";
                 self.isCounterStart = false;

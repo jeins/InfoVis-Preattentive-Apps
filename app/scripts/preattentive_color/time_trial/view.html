@@ -1,13 +1,24 @@
-<md-content style="height: 90%">
+<md-content style="height: 97%">
     <md-whiteframe class="md-whiteframe-4dp" layout-fill layout="column" layout-align="center center">
-        <h2 class="md-title">Tester 1</h2>
-
-        <md-divider md-inset></md-divider>
+        <h2 class="md-title" style="margin-top: -60px">Tester 1</h2>
 
         <md-card style="width: 80%; height: 60%" drtv-canvas>
-            <md-card-content layout-fill layout="column" layout-align="center center">
-
-                <p ng-if="vm.isGameEnd">{{vm.saveGameInfo | json}}</p>
+            <md-card-content layout-fill layout="column" layout-align="center center" ng-style="{'background-color': vm.canvasColor}">
+                <table ng-if="vm.isGameEnd" class="pure-table pure-table-bordered">
+                    <tr>
+                        <th>Level</th>
+                        <th>Answer</th>
+                        <th>Time (ms)</th>
+                    </tr>
+                    <tr ng-repeat="result in vm.saveGameInfo">
+                        <td>{{result["level"] + 1}}</td>
+                        <td>{{result["answer"]}}</td>
+                        <td>{{result["execTime"]}} ms</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center"><md-button class="md-raised md-primary" ng-href="#/">Back To Home</md-button></td>
+                    </tr>
+                </table>
 
                 <h3 ng-if="!vm.isCounterStart && !vm.isGameEnd">{{vm.message[vm.currLevel]}}</h3>
 
@@ -26,9 +37,13 @@
             </md-card-content>
         </md-card>
 
-        <div>
-            <md-icon md-font-set="material-icons" ng-style="{'font-size': '95px'}"> arrow_forward </md-icon>
-            <md-icon md-font-set="material-icons" ng-style="{'font-size': '95px'}"> arrow_forward </md-icon>
+        <div style="width: 80%">
+            <table width="100%">
+                <tr>
+                    <td align="center" ><md-icon md-font-set="material-icons" ng-style="{'font-size': '95px', 'margin-top': '20px'}"> arrow_back </md-icon> Absent</td>
+                    <td align="center" ><md-icon md-font-set="material-icons" ng-style="{'font-size': '95px', 'margin-top': '20px'}" flex> arrow_forward </md-icon> Present</td>
+                </tr>
+            </table>
         </div>
     </md-whiteframe>
 </md-content>
