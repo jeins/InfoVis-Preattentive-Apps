@@ -24,6 +24,11 @@ angular
               controller: 'CtrlColorTimeTrial',
               controllerAs: 'vm'
           })
+          .when('/colors/short-visible', {
+              templateUrl: 'scripts/preattentive_color/short_visible/view.html',
+              controller: 'CtrlColorShortVisible',
+              controllerAs: 'vm'
+          })
           .otherwise({
               redirectTo: '/'
           });
