@@ -27,7 +27,7 @@ function CtrlColorTimeTrial($scope, $log, $interval){
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
-            displayShape(self.currLevel);
+            generateShape();
             $log.info(self.level);
         });
         
@@ -39,22 +39,21 @@ function CtrlColorTimeTrial($scope, $log, $interval){
 
                 if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
                     $log.info("Answer Correct!");
-                    displayAnswer("Correct! With Execute Time: " + execTime + " ms");
+                    displayAnswer("Correct! Execute Time: " + execTime + " ms");
                     self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct", "execTime": execTime});
                     self.canvasColor = "green";
                 } else {
-                    displayAnswer("Ups, Wrong! With Execute Time: " + execTime + " ms");
+                    displayAnswer("Ups, Wrong! Execute Time: " + execTime + " ms");
                     $log.info("Answer Wrong!");
                     self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong", "execTime": execTime});
                     self.canvasColor = "red";
                 }
                 self.isGameStart = false;
+                self.timerCount = "";
                 self.currLevel += 1;
 
-                if(self.currLevel > 2){
-                    $log.info(self.saveGameInfo);
-                } else{
-                    displayShape(self.currLevel);
+                if(self.currLevel < 3){
+                    generateShape();
                 }
             }
         });
@@ -99,22 +98,18 @@ function CtrlColorTimeTrial($scope, $log, $interval){
             return undefined;
         }
     }
-
-    function displayShape(level){console.log(self.level)
-        self.maxPosX = self.level[level].maxPosX - (self.distance*2);
-        self.maxPosY = self.level[level].maxPosY - (self.distance*2);
-        self.box = self.boxLevel[level];
-        self.shapePosition = generateShape(self.maxPosX, self.maxPosY);
-        $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
-    }
     
-    function generateShape(maxPosX, maxPosY){
+    function generateShape(){
+        self.maxPosX = self.level[self.currLevel].maxPosX - (self.distance*2);
+        self.maxPosY = self.level[self.currLevel].maxPosY - (self.distance*2);
+        self.box = self.boxLevel[self.currLevel];
+
         var shapePosition = [];
-        var randomX = Math.ceil(Math.random() * (maxPosX/self.distance)) * self.distance;
-        var randomY = Math.ceil(Math.random() * (maxPosY/self.distance)) * self.distance;
+        var randomX = Math.ceil(Math.random() * (self.maxPosX/self.distance)) * self.distance;
+        var randomY = Math.ceil(Math.random() * (self.maxPosY/self.distance)) * self.distance;
         var randomAnswer = Math.ceil(Math.random() * 2); $log.info("Answer: " + randomAnswer);
-        for(var i=0; i<maxPosX; i+=self.distance){
-            for(var j=0; j<maxPosY; j+=self.distance){
+        for(var i=0; i<self.maxPosX; i+=self.distance){
+            for(var j=0; j<self.maxPosY; j+=self.distance){
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
                         shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "red"});
@@ -129,15 +124,15 @@ function CtrlColorTimeTrial($scope, $log, $interval){
                 }
             }
         }
-        return shapePosition;
+        self.shapePosition = shapePosition;
     }
 
     function getLevel(result){
-            var maxPosX = result[0];
-            var maxPosY = result[1];
+        var maxPosX = result[0];
+        var maxPosY = result[1];
 
-            self.level.push({"maxPosX": Math.ceil((30*maxPosX)/100), "maxPosY": Math.ceil((30*maxPosY)/100)});
-            self.level.push({"maxPosX": Math.ceil((60*maxPosX)/100), "maxPosY": Math.ceil((60*maxPosY)/100)});
-            self.level.push({"maxPosX": ((100*maxPosX)/100), "maxPosY": ((100*maxPosY)/100)});
+        self.level.push({"maxPosX": Math.ceil((30*maxPosX)/100), "maxPosY": Math.ceil((30*maxPosY)/100)});
+        self.level.push({"maxPosX": Math.ceil((60*maxPosX)/100), "maxPosY": Math.ceil((60*maxPosY)/100)});
+        self.level.push({"maxPosX": ((100*maxPosX)/100), "maxPosY": ((100*maxPosY)/100)});
     }
 }
