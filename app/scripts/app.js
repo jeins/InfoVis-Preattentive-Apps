@@ -29,6 +29,16 @@ angular
               controller: 'CtrlColorShortVisible',
               controllerAs: 'vm'
           })
+          .when('/shapes/time-trial', {
+              templateUrl: 'scripts/preattentive_shape/time_trial/view.html',
+              controller: 'CtrlShapeTimeTrial',
+              controllerAs: 'vm'
+          })
+          .when('/shapes/short-visible', {
+              templateUrl: 'scripts/preattentive_shape/short_visible/view.html',
+              controller: 'CtrlShapeShortVisible',
+              controllerAs: 'vm'
+          })
           .otherwise({
               redirectTo: '/'
           });

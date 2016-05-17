@@ -61,6 +61,7 @@ function CtrlColorTimeTrial($scope, $log, $interval){
 
     function startGame(){
         self.isCounterStart = true;
+        self.canvasColor = "#f5f5f5";
         var c = 10;
         var timer = $interval(function(){
             if(c%10 == 0) self.timerCount = c/10;

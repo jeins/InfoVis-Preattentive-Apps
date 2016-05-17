@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('infoVisU2App')
-    .controller('CtrlColorShortVisible', CtrlColorShortVisible);
+    .controller('CtrlShapeShortVisible', CtrlShapeShortVisible);
 
-CtrlColorShortVisible.$inject = ['$scope', '$log', '$interval'];
-function CtrlColorShortVisible($scope, $log, $interval){
+CtrlShapeShortVisible.$inject = ['$scope', '$log', '$interval'];
+function CtrlShapeShortVisible($scope, $log, $interval){
     var self = this;
     self.init = init;
     self.startGame = startGame;
@@ -19,7 +19,7 @@ function CtrlColorShortVisible($scope, $log, $interval){
         self.isGameStart = false;
         self.isCounterStart = false;
         self.isGameEnd = false;
-        self.message = ["Where is the red circle?", "Now with more distractors...", "Added even more disctractors..."];
+        self.message = ["Where is the square?", "Now with more distractors...", "Added even more disctractors..."];
         self.saveGameInfo = [];
         self.canvasColor = "white";
         self.hideTheShape = false;
@@ -111,12 +111,11 @@ function CtrlColorShortVisible($scope, $log, $interval){
             if(c == 20){
                 self.canvasColor = "white";
                 self.hideTheShape = true;
-                self.timerCount = "is the red circle Absent or Present?";
+                self.timerCount = "is the square Absent or Present?";
                 timer = stopTimer(timer);
-                console.log("You see the red circle?");
             }
             c++;
-        }, 3);
+        }, 10);
 
         $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
     }
@@ -134,14 +133,14 @@ function CtrlColorShortVisible($scope, $log, $interval){
             for(var j=0; j<self.maxPosY; j+=self.distance){
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "red"});
+                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": "#383886"});
                         self.answer = "present";
                     }
                     else {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "green"});
+                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
                     }
                 } else{
-                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "green"});
+                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
                     self.answer = "absent";
                 }
             }

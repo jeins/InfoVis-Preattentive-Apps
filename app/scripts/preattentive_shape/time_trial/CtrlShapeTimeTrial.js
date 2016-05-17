@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('infoVisU2App')
-    .controller('CtrlColorShortVisible', CtrlColorShortVisible);
+    .controller('CtrlShapeTimeTrial', CtrlShapeTimeTrial);
 
-CtrlColorShortVisible.$inject = ['$scope', '$log', '$interval'];
-function CtrlColorShortVisible($scope, $log, $interval){
+CtrlShapeTimeTrial.$inject = ['$scope', '$log', '$interval'];
+function CtrlShapeTimeTrial($scope, $log, $interval){
     var self = this;
     self.init = init;
     self.startGame = startGame;
@@ -19,59 +19,58 @@ function CtrlColorShortVisible($scope, $log, $interval){
         self.isGameStart = false;
         self.isCounterStart = false;
         self.isGameEnd = false;
+        self.timeStart = 0;
+        self.timeStop = 0;
         self.message = ["Where is the red circle?", "Now with more distractors...", "Added even more disctractors..."];
         self.saveGameInfo = [];
         self.canvasColor = "white";
-        self.hideTheShape = false;
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
             generateShape();
             $log.info(self.level);
         });
-
+        
         $scope.$on('pressed-key', function(event, result){
             $log.info("Key Pressed: " + result + " " +self.answer);
             if(self.isGameStart){
+                self.timeStop = new Date().getTime();
+                var execTime = self.timeStop - self.timeStart;
+
                 if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
                     $log.info("Answer Correct!");
-                    displayAnswer("Correct!");
-                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct"});
+                    displayAnswer("Correct! Execute Time: " + execTime + " ms");
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct", "execTime": execTime});
                     self.canvasColor = "green";
                 } else {
-                    displayAnswer("Ups, Wrong!");
+                    displayAnswer("Ups, Wrong! Execute Time: " + execTime + " ms");
                     $log.info("Answer Wrong!");
-                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong"});
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong", "execTime": execTime});
                     self.canvasColor = "red";
                 }
-
+                self.isGameStart = false;
+                self.timerCount = "";
                 self.currLevel += 1;
 
                 if(self.currLevel < 3){
                     generateShape();
                 }
-                self.hideTheShape = false;
-                self.isGameStart = false;
-                self.timerCount = "";
             }
         });
     }
 
     function startGame(){
-        self.isCounterStart = true;
         self.canvasColor = "#f5f5f5";
+        self.isCounterStart = true;
         var c = 10;
         var timer = $interval(function(){
             if(c%10 == 0) self.timerCount = c/10;
             if(c == 50) self.timerCount = "Start";
             if(c == 60){
-                timer = stopTimer(timer);
                 self.timerCount = "";
+                timer = stopTimer(timer);
                 self.isGameStart = true;
-                
-                displayShape();
-                
-                $log.info("Current Level: " + self.currLevel);
+                self.timeStart = new Date().getTime();
             }
             c++;
         }, 60);
@@ -87,7 +86,6 @@ function CtrlColorShortVisible($scope, $log, $interval){
                 self.timerCount = "";
                 self.isCounterStart = false;
                 if(self.currLevel > 2){
-                    $log.info(self.saveGameInfo);
                     self.isGameEnd = true;
                 }
             }
@@ -101,26 +99,7 @@ function CtrlColorShortVisible($scope, $log, $interval){
             return undefined;
         }
     }
-
-    function displayShape(){
-        var c = 0;
-        var timer = $interval(function(){
-            if(c == 0) {
-                self.hideTheShape = false;
-            }
-            if(c == 20){
-                self.canvasColor = "white";
-                self.hideTheShape = true;
-                self.timerCount = "is the red circle Absent or Present?";
-                timer = stopTimer(timer);
-                console.log("You see the red circle?");
-            }
-            c++;
-        }, 3);
-
-        $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
-    }
-
+    
     function generateShape(){
         self.maxPosX = self.level[self.currLevel].maxPosX - (self.distance*2);
         self.maxPosY = self.level[self.currLevel].maxPosY - (self.distance*2);
@@ -134,14 +113,14 @@ function CtrlColorShortVisible($scope, $log, $interval){
             for(var j=0; j<self.maxPosY; j+=self.distance){
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "red"});
+                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": "#383886"});
                         self.answer = "present";
                     }
                     else {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "green"});
+                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
                     }
                 } else{
-                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "green"});
+                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": "#383886"});
                     self.answer = "absent";
                 }
             }
