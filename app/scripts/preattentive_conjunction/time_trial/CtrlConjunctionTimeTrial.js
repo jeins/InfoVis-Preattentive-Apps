@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('infoVisU2App')
-    .controller('CtrlShapeTimeTrial', CtrlShapeTimeTrial);
+    .controller('CtrlConjunctionTimeTrial', CtrlConjunctionTimeTrial);
 
-CtrlShapeTimeTrial.$inject = ['$scope', '$log', '$interval'];
-function CtrlShapeTimeTrial($scope, $log, $interval){
+CtrlConjunctionTimeTrial.$inject = ['$scope', '$log', '$interval'];
+function CtrlConjunctionTimeTrial($scope, $log, $interval){
     var self = this;
     self.init = init;
     self.startGame = startGame;
@@ -21,7 +21,7 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
         self.isGameEnd = false;
         self.timeStart = 0;
         self.timeStop = 0;
-        self.message = ["Where is the square?", "Now with more distractors...", "Added even more disctractors..."];
+        self.message = ["Where is the blue square?", "Now with more distractors...", "Added even more disctractors..."];
         self.saveGameInfo = [];
         self.canvasColor = "white";
 
@@ -109,20 +109,28 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
         var randomX = Math.ceil(Math.random() * (self.maxPosX/self.distance)) * self.distance;
         var randomY = Math.ceil(Math.random() * (self.maxPosY/self.distance)) * self.distance;
         var randomAnswer = Math.ceil(Math.random() * 2); $log.info("Answer: " + randomAnswer);
-        var randomColor = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorA = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorB = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorC = '#' + Math.random().toString(16).slice(2, 8);
 
         for(var i=0; i<self.maxPosX; i+=self.distance){
             for(var j=0; j<self.maxPosY; j+=self.distance){
+                var randomShape = Math.ceil(Math.random() * 3);
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
-                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColor});
+                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": "#3f51b5"});
                         self.answer = "present";
                     }
                     else {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
+                        if(randomShape == 1) shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColorA});
+                        if(randomShape == 2) shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColorB});
+                        if(randomShape == 3) shapePosition.push({"shape": "triangle", "x": i, "y": j, "color": randomColorC});
                     }
                 } else{
-                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
+                    if(randomShape == 1) shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColorA});
+                    if(randomShape == 2) shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColorB});
+                    if(randomShape == 3) shapePosition.push({"shape": "triangle", "x": i, "y": j, "color": randomColorC});
+                    
                     self.answer = "absent";
                 }
             }

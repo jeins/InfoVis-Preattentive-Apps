@@ -1,0 +1,57 @@
+<md-content style="height: 97%">
+    <md-whiteframe class="md-whiteframe-4dp" layout-fill layout="column" layout-align="center center">
+        <h1 style="margin-top: -60px;">
+            Test: Conjunction Short Visible
+        </h1>
+        <p style="text-align: center">
+            Use Right / Left-Arrow on your keyboard for selection. <br>
+            Right Keyboard to answer: "Present" | left Keyboard to answer: "Absent"
+        </p>
+
+        <md-card style="width: 80%; height: 60%" drtv-canvas>
+            <md-card-content layout-fill layout="column" layout-align="center center" ng-style="{'background-color': vm.canvasColor}">
+                <table ng-if="vm.isGameEnd" class="pure-table pure-table-bordered">
+                    <tr>
+                        <th>Level</th>
+                        <th>Answer</th>
+                    </tr>
+                    <tr ng-repeat="result in vm.saveGameInfo">
+                        <td>{{result["level"] + 1}}</td>
+                        <td>{{result["answer"]}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><md-button class="md-raised md-primary" ng-href="#/">Back To Home</md-button></td>
+                    </tr>
+                </table>
+
+                <h3 ng-if="!vm.isCounterStart && !vm.isGameEnd">{{vm.message[vm.currLevel]}}</h3>
+
+                <h1 ng-if="(!vm.isGameStart && vm.isCounterStart) || vm.hideTheShape">{{vm.timerCount}}</h1>
+
+                <md-button class="md-icon-button " ng-if="!vm.isCounterStart && !vm.isGameEnd" ng-click="vm.startGame()" style="width: 75px; height: 75px">
+                    <md-icon md-font-set="material-icons"  ng-style="{'font-size': '48px'}"> play_circle_filled </md-icon>
+                    <md-tooltip md-direction="bottom">
+                        Click This, if you ready!
+                    </md-tooltip>
+                </md-button>
+
+                <svg ng-attr-width="{{vm.box}}" ng-attr-height="{{vm.box}}" ng-if="vm.isGameStart && !vm.hideTheShape">
+                    <svg ng-repeat="shape in vm.shapePosition" ng-attr-x="{{ shape.x }}" ng-attr-y="{{ shape.y }}">
+                        <circle ng-if="shape.shape == 'circle'" cx="10" cy="10" r="10" fill="{{shape.color}}"/>
+                        <rect ng-if="shape.shape == 'rect'" height="20" width="20" fill="{{shape.color}}"/>
+                        <polygon ng-if="shape.shape == 'triangle'" fill="{{shape.color}}" points="0,20 10,3 20,20" />
+                    </svg>
+                </svg>
+            </md-card-content>
+        </md-card>
+
+        <div style="width: 80%">
+            <table width="100%">
+                <tr>
+                    <td align="center" ><md-icon md-font-set="material-icons" ng-style="{'font-size': '95px', 'margin-top': '20px'}"> arrow_back </md-icon> Absent</td>
+                    <td align="center" ><md-icon md-font-set="material-icons" ng-style="{'font-size': '95px', 'margin-top': '20px'}" flex> arrow_forward </md-icon> Present</td>
+                </tr>
+            </table>
+        </div>
+    </md-whiteframe>
+</md-content>

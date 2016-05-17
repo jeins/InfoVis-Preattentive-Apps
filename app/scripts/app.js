@@ -39,6 +39,16 @@ angular
               controller: 'CtrlShapeShortVisible',
               controllerAs: 'vm'
           })
+          .when('/conjunction/time-trial', {
+              templateUrl: 'scripts/preattentive_conjunction/time_trial/view.html',
+              controller: 'CtrlConjunctionTimeTrial',
+              controllerAs: 'vm'
+          })
+          .when('/conjunction/short-visible', {
+              templateUrl: 'scripts/preattentive_conjunction/short_visible/view.html',
+              controller: 'CtrlConjunctionShortVisible',
+              controllerAs: 'vm'
+          })
           .otherwise({
               redirectTo: '/'
           });

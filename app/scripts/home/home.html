@@ -1,6 +1,21 @@
 <md-content layout="column">
-    <div layout="row" layout-align="start">
-        <p>Hello World</p>
+    <div layout="row">
+        <div flex="5" hide-xs="hide-xs" hide-sm="hide-sm"></div>
+        <h1>
+            How good is your pre-attentive processing?
+            <br>
+            <small style="font-size: 24px; color: #999; line-height: 1">Choose a Test below to find out</small>
+        </h1>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" style="margin-top: 20px; margin-bottom: 20px">
+        <div flex="5" hide-xs="hide-xs" hide-sm="hide-sm"></div>
+        <p>
+            Pre-attentive processing is the subconscious accumulation of information from the environment.
+            All available information is pre-attentively processed.
+            You can find more information <a href="https://en.wikipedia.org/wiki/Pre-attentive_processing" target="_blank">here.</a>
+        </p>
+        <div flex="10" hide-xs="hide-xs" hide-sm="hide-sm"></div>
     </div>
     <div layout="row" layout-align="center center">
         <div flex-xs flex-gt-xs="30" layout="column">
@@ -60,8 +75,8 @@
                     </p>
                 </md-card-content>
                 <md-card-actions layout="column" layout-align="start">
-                    <md-button>Action 1</md-button>
-                    <md-button>Action 2</md-button>
+                    <md-button ng-href="#/conjunction/time-trial">Time Trial</md-button>
+                    <md-button ng-href="#/conjunction/short-visible">Short Visible</md-button>
                 </md-card-actions>
             </md-card>
         </div>

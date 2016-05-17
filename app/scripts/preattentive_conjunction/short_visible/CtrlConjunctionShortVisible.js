@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('infoVisU2App')
-    .controller('CtrlShapeTimeTrial', CtrlShapeTimeTrial);
+    .controller('CtrlConjunctionShortVisible', CtrlConjunctionShortVisible);
 
-CtrlShapeTimeTrial.$inject = ['$scope', '$log', '$interval'];
-function CtrlShapeTimeTrial($scope, $log, $interval){
+CtrlConjunctionShortVisible.$inject = ['$scope', '$log', '$interval'];
+function CtrlConjunctionShortVisible($scope, $log, $interval){
     var self = this;
     self.init = init;
     self.startGame = startGame;
@@ -19,58 +19,59 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
         self.isGameStart = false;
         self.isCounterStart = false;
         self.isGameEnd = false;
-        self.timeStart = 0;
-        self.timeStop = 0;
-        self.message = ["Where is the square?", "Now with more distractors...", "Added even more disctractors..."];
+        self.message = ["Find the blue square!", "Now with more distractors...", "Added even more disctractors..."];
         self.saveGameInfo = [];
         self.canvasColor = "white";
+        self.hideTheShape = false;
 
         $scope.$on('canvas-size', function (event, result) {
             getLevel(result);
             generateShape();
             $log.info(self.level);
         });
-        
+
         $scope.$on('pressed-key', function(event, result){
             $log.info("Key Pressed: " + result + " " +self.answer);
             if(self.isGameStart){
-                self.timeStop = new Date().getTime();
-                var execTime = self.timeStop - self.timeStart;
-
                 if((result == "right" && self.answer == "present") || (result == "left" && self.answer == "absent")){
                     $log.info("Answer Correct!");
-                    displayAnswer("Correct! Execute Time: " + execTime + " ms");
-                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct", "execTime": execTime});
+                    displayAnswer("Correct!");
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Correct"});
                     self.canvasColor = "green";
                 } else {
-                    displayAnswer("Ups, Wrong! Execute Time: " + execTime + " ms");
+                    displayAnswer("Ups, Wrong!");
                     $log.info("Answer Wrong!");
-                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong", "execTime": execTime});
+                    self.saveGameInfo.push({"level": self.currLevel, "answer": "Wrong"});
                     self.canvasColor = "red";
                 }
-                self.isGameStart = false;
-                self.timerCount = "";
+
                 self.currLevel += 1;
 
                 if(self.currLevel < 3){
                     generateShape();
                 }
+                self.hideTheShape = false;
+                self.isGameStart = false;
+                self.timerCount = "";
             }
         });
     }
 
     function startGame(){
-        self.canvasColor = "#f5f5f5";
         self.isCounterStart = true;
+        self.canvasColor = "#f5f5f5";
         var c = 10;
         var timer = $interval(function(){
             if(c%10 == 0) self.timerCount = c/10;
             if(c == 50) self.timerCount = "Start";
             if(c == 60){
-                self.timerCount = "";
                 timer = stopTimer(timer);
+                self.timerCount = "";
                 self.isGameStart = true;
-                self.timeStart = new Date().getTime();
+                
+                displayShape();
+                
+                $log.info("Current Level: " + self.currLevel);
             }
             c++;
         }, 60);
@@ -86,6 +87,7 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
                 self.timerCount = "";
                 self.isCounterStart = false;
                 if(self.currLevel > 2){
+                    $log.info(self.saveGameInfo);
                     self.isGameEnd = true;
                 }
             }
@@ -99,7 +101,25 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
             return undefined;
         }
     }
-    
+
+    function displayShape(){
+        var c = 0;
+        var timer = $interval(function(){
+            if(c == 0) {
+                self.hideTheShape = false;
+            }
+            if(c == 20){
+                self.canvasColor = "white";
+                self.hideTheShape = true;
+                self.timerCount = "is the blue square Absent or Present?";
+                timer = stopTimer(timer);
+            }
+            c++;
+        }, 10);
+
+        $log.info("Max Size X=%s & Y=%s", self.maxPosX, self.maxPosY);
+    }
+
     function generateShape(){
         self.maxPosX = self.level[self.currLevel].maxPosX - (self.distance*2);
         self.maxPosY = self.level[self.currLevel].maxPosY - (self.distance*2);
@@ -109,20 +129,28 @@ function CtrlShapeTimeTrial($scope, $log, $interval){
         var randomX = Math.ceil(Math.random() * (self.maxPosX/self.distance)) * self.distance;
         var randomY = Math.ceil(Math.random() * (self.maxPosY/self.distance)) * self.distance;
         var randomAnswer = Math.ceil(Math.random() * 2); $log.info("Answer: " + randomAnswer);
-        var randomColor = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorA = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorB = '#' + Math.random().toString(16).slice(2, 8);
+        var randomColorC = '#' + Math.random().toString(16).slice(2, 8);
 
         for(var i=0; i<self.maxPosX; i+=self.distance){
             for(var j=0; j<self.maxPosY; j+=self.distance){
+                var randomShape = Math.ceil(Math.random() * 3);
                 if(randomAnswer == 1){
                     if(i == randomX && j == randomY) {
-                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColor});
+                        shapePosition.push({"shape": "rect", "x": i, "y": j, "color": "#3f51b5"});
                         self.answer = "present";
                     }
                     else {
-                        shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
+                        if(randomShape == 1) shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColorA});
+                        if(randomShape == 2) shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColorB});
+                        if(randomShape == 3) shapePosition.push({"shape": "triangle", "x": i, "y": j, "color": randomColorC});
                     }
                 } else{
-                    shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColor});
+                    if(randomShape == 1) shapePosition.push({"shape": "rect", "x": i, "y": j, "color": randomColorA});
+                    if(randomShape == 2) shapePosition.push({"shape": "circle", "x": i, "y": j, "color": randomColorB});
+                    if(randomShape == 3) shapePosition.push({"shape": "triangle", "x": i, "y": j, "color": randomColorC});
+
                     self.answer = "absent";
                 }
             }
